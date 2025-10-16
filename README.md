@@ -1,17 +1,26 @@
 # 🏃‍♂️‍➡️ Runs database in SQL
 
 ## 📝 Description
-This project is not meant to showcase advanced analytical skills, find the root cause of events, conduct advanced analysis   
-but rather to **demonstrate proficiency in Excel** — including formulas, lookups, and dashboard design.
+This project focuses on analyzing my personal running data collected from sports watch during half-marathon training. Data is transformed into a SQL database consisting of two tables, which together can be used for detailed performance analysis.
+
+This project includes **`data cleaning`**, **`database creation`** and **`exploratory analysis`** through SQL queries designed to provide insights into training progress, strategy and consistency. 
 
 ---
 
-## 📊 Data and Goal
-The dataset contains **1,000 coffee shop transactions**, with some missing information  
-that must be retrieved from other sheets within the same Excel file.  
+## 📊 Data
+The dataset contains detailed information on **32 running sessions** divided into three distinct run types. Each run is further broken down into segments, allowing for a more accurate and dynamic analysis. Data is divided into 2 tables:
 
-**Goal:** Create a clean and interactive dashboard showing sales insights.  
-> The dataset is derived from a public GitHub repository and is freely available for educational purposes and public usage.
+- **`runs`** - provides basic information about each training session: date, time, distance and run type (*Easy run, Sprint series, Progressive run*)
+- **`segments`** - contains detailed information about each segment within a run including segment type (*Warmup, Slow run, Fast run, Run, Sprint, Rest, Cooldown*), segment lenght and performance statistics 
+
+---
+
+## 🎯 Goal
+
+The main goal of this project is to transform raw running data collected from a Garmin watch into a structured SQL database that enables detailed analysis. Table **`runs`** captures summary metrics of each workout, while table **`segments`** provides a detailed breakdown of each session into it's individual components. This structure allows both macro (long-term progress) and micro (intra-session performance) analysis. Through this approach, it becomes possible to:
+- **track progress** - evaluate improvement in pace, endurance and heart rate across training sessions and training segments, 
+- **analyse training structure** - explore the distribution of run types and how training intensity ecolved closed to race day,
+- **assess consistency** - determine how systematically the entire training plan was executed and identify periods of high or low engagement.
 
 ---
 
