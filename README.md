@@ -27,12 +27,17 @@ The main goal of this project is to transform raw running data collected from a 
 ## 🚀 Program Walk-through
 
 ### 1. First look into data
+*`runs table`*
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ae4724b48aa742d0eed65e6c6b2977cef1319e6/Screenshots/runs.png)
+
+*`segments table`*
+
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ae4724b48aa742d0eed65e6c6b2977cef1319e6/Screenshots/segments.png)
+
 ---
 
-### 2. Gathering data with XLOOKUP
+### 2. Creating *`runs_data*` database
 <p align="center">
   <img src="https://i.imgur.com/FPsfjMy.png" alt="XLOOKUP Example" width="600"/>
 </p>
