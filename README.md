@@ -121,9 +121,18 @@ Filling the data into segments table using Table Data Import Wizard
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/63a8bd1e4d6bf7b994bb1208c366d147381a63eb/Screenshots/segments_table_overview.png)
 
+There are few issues with data:
+- **`total_time`** column - data type is *TIME* which can cause issues with aggregate functions (**`runs`** table)
+- **`max_he`** column - typo in column name, max_he instead of max_hr (**`segments`** table)
+- **`segment_time`** and **`avg_pace`** columns - wrong *TIME* format, seconds are taken as minutes and minutes as hours (**`segments`** table)
+- **`segment_time`** and **`avg_pace`** columns - data type is *TIME* which can cause issues with aggregate functions (**`seconds`** table)
+
 ---
 
 #### 2.4 Data cleaning 
+
+
+
 
 ##### Correcting a typo in column name in *`segments`* table
 
