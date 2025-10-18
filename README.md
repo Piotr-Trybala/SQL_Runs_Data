@@ -113,13 +113,22 @@ Filling the data into segments table using Table Data Import Wizard
 
 #### 2.3 Overview of created tables
 
-*`runs`*  table
+*`runs`* table
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/63a8bd1e4d6bf7b994bb1208c366d147381a63eb/Screenshots/runs_table_overview.png)
 
 *`segments`* table
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/63a8bd1e4d6bf7b994bb1208c366d147381a63eb/Screenshots/segments_table_overview.png)
+
+We can check how aggregate functions would work in this type of data with visible issues:
+
+```sql
+SELECT segment_type,AVG(avg_pace)																	#Checking aggregations on TIME format columns
+FROM segments
+GROUP BY segment_type;
+```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/3d341610b5d2233c0b01f1059c0a37c5750556b9/Screenshots/type_time_avg.png)
 
 There are few issues with data:
 - **`total_time`** column - data type is *TIME* which can cause issues with aggregate functions (**`runs`** table)
@@ -131,24 +140,34 @@ There are few issues with data:
 
 #### 2.4 Data cleaning 
 
+In order to be able to use aggregate functions, the only thing that need to be done in the *`runs`* table is to create an additionall column that counts number of seconds 
 
+```sql
+ALTER TABLE runs
+	ADD COLUMN total_time_sec INT AFTER total_time;
+UPDATE runs
+SET 
+	total_time_sec = TIME_TO_SEC(total_time);
+```
+---
 
+Table *`runs`* requires more modifications. 
 
-##### Correcting a typo in column name in *`segments`* table
+##### Correcting column name from `max_he` to `max_hr`
 
 ```sql
 ALTER TABLE segments RENAME COLUMN max_he TO max_hr;
 ```
-##### Checking and changing type of columns containing time values 
 
-Creating a query to see the results of aggregated functions on columns of the `time` type
+##### Correcting TIME format before converting into seconds
+
+Current TIME format shows seconds as minutes and minutes as hours, in order to receive reasonable data we need to change it. Easy way it can be done is with MAKETIME function with HOUR and MINUTE but first, we need to make sure that there are no odd results like 99 hours that would complicate the analysis, that would require us to go back to source files.
 
 ```sql
-SELECT segment_type,AVG(avg_pace)
-FROM segments
-GROUP BY segment_type;
+SELECT MAX(segment_time), MAX(avg_pace)
+FROM segments;
 ```
-![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/3d341610b5d2233c0b01f1059c0a37c5750556b9/Screenshots/type_time_avg.png)
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/c4edf9b01cda3db862e7bf537f72ec7a2975267b/Screenshots/MAXs.png)
 
 
 
