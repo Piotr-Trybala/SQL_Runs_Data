@@ -182,10 +182,142 @@ SET
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/7768d21c0555f4f12f081aa0b75fe7c6de6f4693/Screenshots/segments_updated.png)
 
+Testing aggregate functions on new columns:
+
+```sql
+SELECT 																								
+	segment_type, 
+    ROUND(AVG(avg_pace_sec),2) AS avg_pace_sec, 		
+	SEC_TO_TIME(ROUND(AVG(avg_pace_sec))) AS avg_pace_formatted
+FROM segments
+GROUP BY segment_type;
+```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/478b5825cc5f526d496304bfd39e0a66802c03de/Screenshots/aggregate_functions_new.png)
+
 ---
 ### 3. SQL Exploratory Analysis
 
+#### 3.1 How many runs of each type were completed during training period?
 
+```sql
+SELECT 
+	run_type, 
+    COUNT(*) AS number_of_runs																		
+FROM runs
+GROUP BY run_type
+ORDER BY number_of_runs DESC;
+```
+
+#### 3.2 What is the average distance and duration for each run type?
+
+```sql
+SELECT			
+	run_type,
+    ROUND(AVG(total_distance_km),2) AS average_distance,
+    SEC_TO_TIME(ROUND(AVG(total_time_sec))) AS average_duration
+FROM runs
+GROUP BY run_type
+ORDER BY average_distance DESC;
+```
+
+#### 3.3 Which runs were the longest?
+
+```sql
+SELECT																								
+	run_date,
+	run_type,
+    total_distance_km,
+    total_time
+FROM runs
+ORDER BY total_distance_km DESC
+LIMIT 5; 
+```
+
+#### 3.4 What is the average and maximum heart rate for each run type?
+
+```sql
+SELECT																								
+	r.run_type,
+    ROUND(AVG(s.avg_hr)) AS avg_hr,
+    MAX(s.max_hr) AS max_hr
+FROM runs AS r
+JOIN segments AS s
+USING (run_id)
+GROUP BY run_type;
+```
+
+#### 3.5 Which weeks had the highest total training volume?
+
+```sql
+SELECT																								
+	1+FLOOR(DATEDIFF(run_date, (SELECT MIN(run_date) FROM runs))/7) AS training_week,
+    COUNT(*) AS total_runs
+FROM runs
+GROUP BY training_week;
+```
+
+#### 3.6 What is the average pace per segment type and to which run_type it belongs?
+
+```sql
+SELECT																								
+	r.run_type,
+    s.segment_type,
+    SEC_TO_TIME(ROUND(AVG(s.avg_pace_sec))) AS average_pace,
+    ROUND(AVG(s.avg_hr)) AS average_heart_rate
+FROM runs AS r
+JOIN segments AS s
+USING (run_id)
+GROUP BY r.run_type, segment_type;
+```
+
+#### 3.7 How average pace of segment type 'Run' evolved during each of Easy runs?
+
+```sql
+SELECT 				
+	run_id,
+    s.segment_type,
+    s.segment_distance,
+    SEC_TO_TIME(s.avg_pace_sec) AS pace_per_segment,
+    SEC_TO_TIME(ROUND(AVG(s.avg_pace_sec) OVER(
+		PARTITION BY run_id))) AS avg_segment_pace
+FROM runs AS r
+JOIN segments AS s
+USING (run_id)
+WHERE s.segment_type = 'Run'
+;
+```
+
+#### 3.8 How many runs in Easy runs were 'Long runs' (over 15 km), 'Short runs' (7-15 km) and 'Recovery runs' (<7 km)?
+
+```sql
+SELECT	
+	CASE WHEN total_distance_km < 7 THEN 'Recovery run'
+		WHEN total_distance_km BETWEEN 7 AND 14 THEN 'Short run'
+        ELSE 'Long run' 
+	END AS run_lenth_category,
+    COUNT(*)
+FROM runs
+WHERE run_type = 'Easy run'
+GROUP BY run_lenth_category
+;
+```
+
+#### 3.9 Which runs were faster than the overall average?
+
+```sql
+SELECT	
+	*,
+    SEC_TO_TIME(ROUND(total_time_sec/total_distance_km)) AS avg_run_pace,
+    SEC_TO_TIME(
+		ROUND((SELECT SUM(total_time_sec)/SUM(total_distance_km) 
+		FROM runs))) AS overall_average_pace
+FROM runs 
+WHERE (total_time_sec/total_distance_km) < (
+	SELECT SUM(total_time_sec)/SUM(total_distance_km)
+    FROM runs
+    )
+;
+```
 ---
 
 
