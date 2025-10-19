@@ -17,9 +17,9 @@ The dataset contains detailed information on **32 running sessions** divided int
 
 ## 🎯 Goal
 
-The main goal of this project is to transform raw running data collected from a Garmin watch into a structured SQL database that enables detailed analysis. Table **`runs`** captures summary metrics of each workout, while table **`segments`** provides a detailed breakdown of each session into it's individual components. This structure allows both macro (long-term progress) and micro (intra-session performance) analysis. Through this approach, it becomes possible to:
+The main goal of this project is to transform raw running data collected from a Garmin watch into a structured SQL database that enables detailed analysis. Table **`runs`** captures summary metrics of each workout, while table **`segments`** provides a detailed breakdown of each session into its individual components. This structure allows both macro (long-term progress) and micro (intra-session performance) analysis. Through this approach, it becomes possible to:
 - **track progress** - evaluate improvement in pace, endurance and heart rate across training sessions and training segments, 
-- **analyse training structure** - explore the distribution of run types and how training intensity ecolved closed to race day,
+- **analyse training structure** - explore the distribution of run types and how training intensity evolved closed to race day,
 - **assess consistency** - determine how systematically the entire training plan was executed and identify periods of high or low engagement.
 
 ---
@@ -41,7 +41,9 @@ The main goal of this project is to transform raw running data collected from a 
 
 ```sql
 DROP DATABASE IF EXISTS runs_data;
-CREATE DATABASE IF NOT EXISTS runs_data CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
+CREATE DATABASE IF NOT EXISTS runs_data
+	CHARACTER SET 'utf8mb4' 
+	COLLATE 'utf8mb4_unicode_ci';
 SHOW DATABASES;
 USE runs_data;
 ```
@@ -52,43 +54,16 @@ CREATE TABLE runs (
     run_date DATE NOT NULL,
     run_type ENUM('Sprint series', 'Easy run', 'Progressive run') NOT NULL,
     total_distance_km DECIMAL(5,2),
-    total_time TIME);
+    total_time TIME
+	);
 ```
-Filling the data manually into the table
+Filling the data manually into the table.
 ```sql
 INSERT INTO runs (run_date, run_type, total_distance_km, total_time)
 VALUES 
 	(STR_TO_DATE('26.06.2025', '%d.%m.%Y'), 'Sprint series', 5.400, '00:40:38'),
 	(STR_TO_DATE('30.06.2025', '%d.%m.%Y'), 'Easy run', 6.370, '00:40:00'),
-	(STR_TO_DATE('02.07.2025', '%d.%m.%Y'), 'Sprint series', 6.060, '00:38:39'),
-	(STR_TO_DATE('03.07.2025', '%d.%m.%Y'), 'Easy run', 8.090, '00:53:58'),
-	(STR_TO_DATE('09.07.2025', '%d.%m.%Y'), 'Easy run', 4.340, '00:30:00'),
-	(STR_TO_DATE('10.07.2025', '%d.%m.%Y'), 'Easy run', 5.420, '00:29:57'),
-	(STR_TO_DATE('12.07.2025', '%d.%m.%Y'), 'Easy run', 4.200, '00:30:00'),
-	(STR_TO_DATE('16.07.2025', '%d.%m.%Y'), 'Sprint series', 6.460, '00:40:48'),
-	(STR_TO_DATE('17.07.2025', '%d.%m.%Y'), 'Progressive run', 6.250, '00:39:58'),
-	(STR_TO_DATE('21.07.2025', '%d.%m.%Y'), 'Easy run', 8.900, '01:00:00'),
-	(STR_TO_DATE('24.07.2025', '%d.%m.%Y'), 'Progressive run', 7.320, '00:45:01'),
-	(STR_TO_DATE('26.07.2025', '%d.%m.%Y'), 'Sprint series', 6.010, '00:40:50'),
-	(STR_TO_DATE('27.07.2025', '%d.%m.%Y'), 'Easy run', 11.170, '01:19:59'),
-	(STR_TO_DATE('29.07.2025', '%d.%m.%Y'), 'Sprint series', 6.160, '00:40:50'),
-	(STR_TO_DATE('31.07.2025', '%d.%m.%Y'), 'Progressive run', 7.860, '00:50:00'),
-	(STR_TO_DATE('03.08.2025', '%d.%m.%Y'), 'Easy run', 12.730, '01:30:00'),
-	(STR_TO_DATE('04.08.2025', '%d.%m.%Y'), 'Easy run', 7.730, '00:50:05'),
-	(STR_TO_DATE('06.08.2025', '%d.%m.%Y'), 'Easy run', 8.270, '00:50:01'),
-	(STR_TO_DATE('17.08.2025', '%d.%m.%Y'), 'Easy run', 16.620, '01:41:29'),
-	(STR_TO_DATE('26.08.2025', '%d.%m.%Y'), 'Sprint series', 5.720, '00:40:50'),
-	(STR_TO_DATE('28.08.2025', '%d.%m.%Y'), 'Progressive run', 7.940, '01:00:01'),
-	(STR_TO_DATE('31.08.2025', '%d.%m.%Y'), 'Easy run', 19.970, '02:04:36'),
-	(STR_TO_DATE('02.09.2025', '%d.%m.%Y'), 'Easy run', 5.450, '00:48:51'),
-	(STR_TO_DATE('04.09.2025', '%d.%m.%Y'), 'Easy run', 6.090, '00:50:01'),
-	(STR_TO_DATE('12.09.2025', '%d.%m.%Y'), 'Sprint series', 5.740, '00:40:50'),
-	(STR_TO_DATE('15.09.2025', '%d.%m.%Y'), 'Easy run', 16.280, '01:45:00'),
-	(STR_TO_DATE('24.09.2025', '%d.%m.%Y'), 'Sprint series', 5.190, '00:38:39'),
-	(STR_TO_DATE('26.09.2025', '%d.%m.%Y'), 'Progressive run', 6.650, '00:40:01'),
-	(STR_TO_DATE('29.09.2025', '%d.%m.%Y'), 'Sprint series', 5.330, '00:37:53'),
-	(STR_TO_DATE('02.10.2025', '%d.%m.%Y'), 'Progressive run', 9.670, '01:00:00'),
-	(STR_TO_DATE('03.10.2025', '%d.%m.%Y'), 'Easy run', 16.100, '01:40:03'),
+	...
 	(STR_TO_DATE('12.10.2025', '%d.%m.%Y'), 'Easy run', 21.310, '01:57:09');
 ```
 #### 2.2 Creating *`segments`* table
@@ -103,9 +78,10 @@ CREATE TABLE segments (
     avg_pace TIME,
     avg_hr INT,
     max_he INT,
-    FOREIGN KEY (run_id) REFERENCES runs(run_id));
+    FOREIGN KEY (run_id) REFERENCES runs(run_id)
+	);
 ```
-Filling the data into segments table using Table Data Import Wizard
+Filling the data into segments table using Table Data Import Wizard.
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2aee9ed4ffcbaaeb73056ad286c9dae6ccee2ea4/Screenshots/Import%20wizard.png)
 
@@ -121,10 +97,10 @@ Filling the data into segments table using Table Data Import Wizard
 
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/63a8bd1e4d6bf7b994bb1208c366d147381a63eb/Screenshots/segments_table_overview.png)
 
-We can check how aggregate functions would work in this type of data with visible issues:
+Testing aggregate functions on time-based columns:
 
 ```sql
-SELECT segment_type,AVG(avg_pace)																	#Checking aggregations on TIME format columns
+SELECT segment_type,AVG(avg_pace)																	
 FROM segments
 GROUP BY segment_type;
 ```
@@ -140,7 +116,7 @@ There are few issues with data:
 
 #### 2.4 Data cleaning 
 
-In order to be able to use aggregate functions, the only thing that need to be done in the *`runs`* table is to create an additionall column that counts number of seconds 
+##### Add column for total time in seconds (*`runs`* table) 
 
 ```sql
 ALTER TABLE runs
@@ -151,17 +127,16 @@ SET
 ```
 ---
 
-Table *`runs`* requires more modifications. 
-
-##### Correcting column name from `max_he` to `max_hr`
+##### Correct typo in column name (*`segments`* table)
 
 ```sql
-ALTER TABLE segments RENAME COLUMN max_he TO max_hr;
+ALTER TABLE segments 
+	RENAME COLUMN max_he TO max_hr;
 ```
 
-##### Correcting TIME format before converting into seconds
+##### Correct wrong TIME format before converting into seconds (*`segments`* table)
 
-Current TIME format shows seconds as minutes and minutes as hours, in order to receive reasonable data we need to change it. Easy way it can be done is with MAKETIME function with HOUR and MINUTE, but first, we need to make sure that there are no odd results like 99 hours that would complicate the analysis, that would require us to go back to the source files.
+The *`segment_time`* and *`avg_pace`* columns were imported in incorrect format - seconds were interpreted as minutes and minutes as hours. To fix this, we create new columns using the *`MAKETIME()`* function with *`HOUR`* and *`MINUTE`* as arguments. But first, we need to check for odd results in incorrectly imported data to make sure that functions are applicable.
 
 ```sql
 SELECT MAX(segment_time), MAX(avg_pace)
@@ -169,14 +144,14 @@ FROM segments;
 ```
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/c4edf9b01cda3db862e7bf537f72ec7a2975267b/Screenshots/MAXs.png)
 
-As maximum results are below 60, we can proceed with adding columns for fixed values with TIME format
+Since no value exceeds 60 hours, we can safely apply the transformation.
 
 ```sql
 ALTER TABLE segments																				
 	ADD COLUMN segment_time_fixed TIME AFTER segment_time,
     ADD COLUMN avg_pace_fixed TIME AFTER avg_pace;
 ```
-Filling columns with data by MAKETIME function
+Fill the new columns with corrected values using *`MAKETIME`* functions
 
 ```sql
 UPDATE segments
@@ -184,17 +159,20 @@ SET
 	segment_time_fixed = MAKETIME(0, HOUR(segment_time), MINUTE(segment_time)),
     avg_pace_fixed = MAKETIME(0, HOUR(avg_pace), MINUTE(avg_pace));
 ```
-##### Creating additional column INT format with number of seconds
+
+##### Convert TIME to seconds (INT)
+
 ```sql
 ALTER TABLE segments																				
 	ADD COLUMN segment_time_sec INT AFTER segment_time_fixed,
     ADD COLUMN avg_pace_sec INT AFTER avg_pace_fixed;
 UPDATE segments
-SET segment_time_sec = TIME_TO_SEC(segment_time_fixed),
+SET 
+	segment_time_sec = TIME_TO_SEC(segment_time_fixed),
 	avg_pace_sec = TIME_TO_SEC(avg_pace_fixed);
 ```
 ---
-##### Overview of the table after changes
+##### Overview of the tables after Data Cleaning
 
 *`runs`* table
 
@@ -205,27 +183,11 @@ SET segment_time_sec = TIME_TO_SEC(segment_time_fixed),
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/7768d21c0555f4f12f081aa0b75fe7c6de6f4693/Screenshots/segments_updated.png)
 
 ---
-### 3. Creating Pivot Tables
-Used for **quick analysis** and as data sources for charts.
-<p align="center">
-  <img src="https://i.imgur.com/aGcUcLP.png" alt="Pivot Tables" width="600"/>
-</p>
+### 3. SQL Exploratory Analysis
+
 
 ---
 
-### 4. Building an Interactive Dashboard
-Includes:
-- Custom **Timeline Layout**
-- **Category Filters**
-- Dynamic charts
-<p align="center">
-  <img src="https://i.imgur.com/koLnWEj.png" alt="Dashboard Example" width="600"/>
-</p>
-
-Filtered dashboard view:
-<p align="center">
-  <img src="https://i.imgur.com/oeVXwlY.png" alt="Filtered Dashboard" width="600"/>
-</p>
 
 ---
 
