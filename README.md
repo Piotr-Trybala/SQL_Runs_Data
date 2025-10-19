@@ -332,10 +332,32 @@ WHERE (total_time_sec/total_distance_km) < (
 
 ---
 
+## Insights 👀
+
+The analysis of the training plan revealed a generally consistent running routine with only one week without any recorded session and four weeks with just a single training unit. Overall, training sessions were performed regularly throughout the program. The highest training frequency was observed during weeks 5 and 6, indicating a mid-plan workload peak.
+
+The most frequently performed session type was **`Easy run`**, which dominated the overall structure of the training plan. The longest sessions occurred in the later stages (weeks 20-32), which aligns with typical strategies, where longer runs are introduced progressively into the training plan.
+
+However, a critical obserwvtion is that the current classification of **`Easy run`** session groups together very different types of workout, including short recovery jogs, regular aerobic runs and long endurance runs. This lack of differentiation makes it difficult to analyze performance trends accurately.
+
+A more meaningful categorization would be to split **`Easy run`** into:
+
+- **`Recovery run`** - short, easy sessions aimed to active recovery,
+- **`Short run`** - standard aerobic runs,
+- **`Long run`** - extended endurance-building efforts. 
+
+Without this categorization, identifying a potential downward trend in pace (improvement) for **`Easy runs`** is challenging, as faster aerobic sessions are mixed with slower recovery runs.
+
+The overall dataset structure is suitable for further analysis, such as calculating rolling averages of total distance, identifying performance trends and exploring correlations between training volume and pace improvements, but requires previously mentioned changes and longer observation period to produce more meaningful insights.
 
 ## 💡 Key Skills Demonstrated
-- Excel formulas: `XLOOKUP`, `INDEX`, `MATCH`
-- Data cleaning and transformation
-- Pivot Tables & Charts
-- Dashboard design and interactivity
-- Layout formatting and presentation
+- Relational database design – structured raw training data into a clean, well-normalized SQL schema with appropriate keys and constraints.
+- Data cleaning and transformation – identified and corrected issues with time formatting, column naming, and data consistency; converted non-aggregable TIME data into numeric formats suitable for analysis.
+- Exploratory data analysis using SQL – performed time-series analysis to uncover training patterns, workload peaks, and session distribution across different run types.
+- Analytical thinking – recognized classification limitations within the dataset and proposed a more meaningful categorization strategy to enable deeper performance insights.
+- Aggregate functions – SUM(), AVG(), MIN(), MAX(), COUNT().
+- String & date/time manipulation – MAKETIME(), TIME_TO_SEC(), SEC_TO_TIME(), DATE_FORMAT(), used for converting and standardizing non-aggregable time data.
+- Conditional logic – CASE WHEN expressions to classify runs and handle data irregularities.
+- JOIN - to combine run-level and segment-level datasets for analysis.
+- Subqueries – applied in both SELECT and FROM clauses to calculate intermediate metrics.
+- Window functions - AVG() OVER(PARTITION BY ...) to derive rolling averages and segment rankings.
