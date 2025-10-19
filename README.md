@@ -161,7 +161,7 @@ ALTER TABLE segments RENAME COLUMN max_he TO max_hr;
 
 ##### Correcting TIME format before converting into seconds
 
-Current TIME format shows seconds as minutes and minutes as hours, in order to receive reasonable data we need to change it. Easy way it can be done is with MAKETIME function with HOUR and MINUTE but first, we need to make sure that there are no odd results like 99 hours that would complicate the analysis, that would require us to go back to source files.
+Current TIME format shows seconds as minutes and minutes as hours, in order to receive reasonable data we need to change it. Easy way it can be done is with MAKETIME function with HOUR and MINUTE, but first, we need to make sure that there are no odd results like 99 hours that would complicate the analysis, that would require us to go back to the source files.
 
 ```sql
 SELECT MAX(segment_time), MAX(avg_pace)
@@ -169,11 +169,40 @@ FROM segments;
 ```
 ![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/c4edf9b01cda3db862e7bf537f72ec7a2975267b/Screenshots/MAXs.png)
 
+As maximum results are below 60, we can proceed with adding columns for fixed values with TIME format
 
+```sql
+ALTER TABLE segments																				
+	ADD COLUMN segment_time_fixed TIME AFTER segment_time,
+    ADD COLUMN avg_pace_fixed TIME AFTER avg_pace;
+```
+Filling columns with data by MAKETIME function
 
+```sql
+UPDATE segments
+SET
+	segment_time_fixed = MAKETIME(0, HOUR(segment_time), MINUTE(segment_time)),
+    avg_pace_fixed = MAKETIME(0, HOUR(avg_pace), MINUTE(avg_pace));
+```
+##### Creating additional column INT format with number of seconds
+```sql
+ALTER TABLE segments																				
+	ADD COLUMN segment_time_sec INT AFTER segment_time_fixed,
+    ADD COLUMN avg_pace_sec INT AFTER avg_pace_fixed;
+UPDATE segments
+SET segment_time_sec = TIME_TO_SEC(segment_time_fixed),
+	avg_pace_sec = TIME_TO_SEC(avg_pace_fixed);
+```
+---
+##### Overview of the table after changes
 
+*`runs`* table
 
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/7768d21c0555f4f12f081aa0b75fe7c6de6f4693/Screenshots/runs_updated.png)
 
+*`segments`* table
+
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/7768d21c0555f4f12f081aa0b75fe7c6de6f4693/Screenshots/segments_updated.png)
 
 ---
 ### 3. Creating Pivot Tables
