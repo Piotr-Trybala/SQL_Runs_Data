@@ -207,6 +207,8 @@ FROM runs
 GROUP BY run_type
 ORDER BY number_of_runs DESC;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/How%20many%20runs%20of%20each%20type%20were%20completed%20during%20training%20period.png)
+
 
 #### 3.2 What is the average distance and duration for each run type?
 
@@ -219,6 +221,8 @@ FROM runs
 GROUP BY run_type
 ORDER BY average_distance DESC;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/What%20is%20the%20average%20distance%20and%20duration%20for%20each%20run%20type.png)
+
 
 #### 3.3 Which runs were the longest?
 
@@ -232,6 +236,7 @@ FROM runs
 ORDER BY total_distance_km DESC
 LIMIT 5; 
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/Which%20runs%20were%20the%20longest.png)
 
 #### 3.4 What is the average and maximum heart rate for each run type?
 
@@ -245,6 +250,7 @@ JOIN segments AS s
 USING (run_id)
 GROUP BY run_type;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/What%20is%20the%20average%20and%20maximum%20heart%20rate%20for%20each%20run%20type.png)
 
 #### 3.5 Which weeks had the highest total training volume?
 
@@ -255,6 +261,7 @@ SELECT
 FROM runs
 GROUP BY training_week;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/Which%20weeks%20had%20the%20highest%20total%20training%20volume.png)
 
 #### 3.6 What is the average pace per segment type and to which run_type it belongs?
 
@@ -269,6 +276,7 @@ JOIN segments AS s
 USING (run_id)
 GROUP BY r.run_type, segment_type;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/What%20is%20the%20average%20pace%20per%20segment%20type%20and%20to%20which%20run_type%20it%20belongs.png)
 
 #### 3.7 How average pace of segment type 'Run' evolved during each of Easy runs?
 
@@ -286,6 +294,7 @@ USING (run_id)
 WHERE s.segment_type = 'Run'
 ;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/How%20average%20pace%20of%20segment%20type%20'Run'%20evolved%20during%20each%20of%20Easy%20runs.png)
 
 #### 3.8 How many runs in Easy runs were 'Long runs' (over 15 km), 'Short runs' (7-15 km) and 'Recovery runs' (<7 km)?
 
@@ -301,6 +310,7 @@ WHERE run_type = 'Easy run'
 GROUP BY run_lenth_category
 ;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/How%20many%20runs%20Long%20runs%20Short%20runs%20and%20Recovery%20runs.png)
 
 #### 3.9 Which runs were faster than the overall average?
 
@@ -318,10 +328,10 @@ WHERE (total_time_sec/total_distance_km) < (
     )
 ;
 ```
+![image_alt](https://github.com/Piotr-Trybala/SQL_Runs_Data/blob/2ea3d6cc3012220287c3ef2491871c8ef85ae553/Screenshots/Which%20runs%20were%20faster%20than%20the%20overall%20average.png)
+
 ---
 
-
----
 
 ## 💡 Key Skills Demonstrated
 - Excel formulas: `XLOOKUP`, `INDEX`, `MATCH`
